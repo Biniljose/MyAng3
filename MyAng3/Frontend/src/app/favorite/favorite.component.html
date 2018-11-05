@@ -1,0 +1,24 @@
+<div *ngIf="arrFavNewsArticles.length <= 0" class="alert alert-info" role="alert">
+  You have no favorites news.
+</div>
+
+<div id="favorites" class="row">
+  <div class="col-sm-6" *ngFor="let article of arrFavNewsArticles">
+    <div class="card news-card">
+      <img *ngIf="article.newsImage" class="card-img-top news-image" src={{article.newsImage}} alt={{article.newsTitle}}>
+      <div class="card-body">
+        <h5 class="card-title news-title"> {{article.newsTitle}}</h5>
+        <p class="card-text news-description">{{article.newsDescription}}</p>
+        <p class="card-text news-published">
+          <small class="text-muted">Published on {{article.newsPubishedTime | date: 'dd/MM/yyyy'}}</small>
+        </p>
+        <div class="row">
+          <div class="col-md-4" style="margin-left:1%">
+            <button type="button" class="btn btn-secondary favorite-btn" (click)="removeFromFavorites(article);">Remove from Favorites</button>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

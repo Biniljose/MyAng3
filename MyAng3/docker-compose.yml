@@ -1,0 +1,36 @@
+version: "3"
+services:
+
+    news-app-database-2:
+        image: microsoft/mssql-server-windows-express
+        ports:
+            - "1433:1433"
+        environment:
+            - ACCEPT_EULA=Y
+            - SA_PASSWORD=Test1234
+            
+        volumes:
+            - C:\SQLServer:C:\SQLServer               
+               
+    news-app-dotnet:
+        build: ./Backend/news-app-dotnet/.
+        image: news-app-dotnet:latest
+        ports:
+            - "8080:80" 
+        depends_on:
+            - news-app-database-2
+            
+    news-app-angular:
+        build: ./Frontend/.
+        image: angularimage2
+        ports:
+            - "4200:4200" 
+        depends_on:
+            - news-app-dotnet
+
+networks:
+  default:
+    external:
+      name: nat
+
+            

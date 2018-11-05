@@ -1,0 +1,79 @@
+<!-- <app-newsbody [newsarticle]="selectedArticle"></app-newsbody> -->
+<div class="alert alert-info" role="alert">
+  Read Headlines and news categories.
+</div>
+<div [ngClass]="{'loader': !dashboardLoaded}"></div>
+
+<div class="headlines-section">
+  <div class="card-deck">
+    <div class="card news-card" *ngFor="let article of arrNewsArticles | paginate: { itemsPerPage: 3, currentPage: p}">
+      <img *ngIf="article.urlToImage" class="card-img-top news-image" src={{article.urlToImage}} alt={{article.title}} height="200" width="350">
+      <div class="card-body">
+        <h5 class="card-title news-title"> {{article.title}}</h5>
+        <p class="card-text news-description">{{article.description}}</p>
+        <div class="row">
+          <div class="col-md-4" style="margin-left:1%">
+            <button type="button" *ngIf="CheckNewsInFavorites(article)" class="btn btn-secondary favorite-btn" (click)="removeFromFavorites(article);">Remove from Favorites</button>
+            <button type="button" *ngIf="!CheckNewsInFavorites(article)" class="btn btn-success unfavorite-btn" (click)="addNewsToFavorites(article);">Add to Favorites</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-footer">
+        <p class="card-text news-published">
+          <small class="text-muted">Published on {{article.publishedAt | date: 'dd/MM/yyyy'}}</small>
+        </p>
+      </div>
+    </div>
+  </div>
+  <br />
+  <pagination-controls (pageChange)="p = $event"></pagination-controls>
+</div>
+<hr>
+<div class="category-section">
+  <div class="row align-items-center justify-content-center">
+    <h4>View News Categories</h4>
+    <div class="col-sm-3">
+      <div class="dropdown">
+        <select class="form-control category-drop-down" (change)="loadCategory($event.target.value)">
+          <!-- <option>Select</option> -->
+          <option *ngFor="let category of arrNewsCategory">
+            {{category}}
+          </option>
+        </select>
+      </div>
+    </div>
+  </div>
+  <br />
+  <div class="row">
+    <div class="col-sm-6" *ngFor="let article of arrNewsArticlesByCat">
+      <div class="card news-card">
+        <img *ngIf="article.urlToImage" class="card-img-top news-image" src={{article.urlToImage}} alt={{article.title}}>
+        <div class="card-body">
+          <h5 class="card-title news-title"> {{article.title}}</h5>
+          <p class="card-tex news-descriptiont">{{article.description}}</p>
+          <p class="card-text news-published">
+            <small class="text-muted">Published on {{article.publishedAt | date: 'dd/MM/yyyy'}}</small>
+          </p>
+          <div class="row">
+            <div class="col-md-4" style="margin-left:1%">
+              <button type="button" *ngIf="CheckNewsInFavorites(article)" class="btn btn-secondary favorite-btn" (click)="removeFromFavorites(article);">Remove from Favorites</button>
+              <button type="button" *ngIf="!CheckNewsInFavorites(article)" class="btn btn-success unfavorite-btn" (click)="addNewsToFavorites(article);">Add to Favorites</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <nav aria-label="Page navigation example">
+    <ul class="pagination justify-content-end">
+      <li class="page-item" [ngClass]="{'disabled': pageNo <= 1}">
+        <a class="page-link" [ngClass]="{'disabled': pageNo <= 1}" (click)="pageNo=pageNo-1; showNewsByCategory(currentCategory, pageNo)"
+           tabindex="-1">Previous</a>
+      </li>
+      <li class="page-item" [ngClass]="{'disabled': totalNewsCount <= 20}">
+        <a class="page-link" [ngClass]="{'disabled': totalNewsCount <= 20}" (click)="pageNo=pageNo+1; showNewsByCategory(currentCategory, pageNo)">Next</a>
+      </li>
+    </ul>
+  </nav>
+</div>

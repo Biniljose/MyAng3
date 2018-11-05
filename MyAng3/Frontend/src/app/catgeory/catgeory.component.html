@@ -1,0 +1,41 @@
+<div class="row align-items-center justify-content-center">
+  <h4>View News Categories</h4>
+  <div class="col-sm-3">
+    <div class="dropdown">
+      <select class="form-control" (change)="showNewsByCategory($event.target.value, pageNo)">
+        <!-- <option>Select</option> -->
+        <option *ngFor="let category of arrNewsCategory">
+          {{category}}
+        </option>
+      </select>
+    </div>
+  </div>
+</div>
+
+<br/>
+
+
+<div class="category-section">
+  <div *ngFor="let article of arrNewsArticlesByCat" class="card mb-3 news-card">
+    <img *ngIf="article.urlToImage" class="card-img-top news-image" src={{article.urlToImage}} alt={{article.title}}>
+    <div class="card-body">
+      <h5 class="card-title news-title"> {{article.title}}</h5>
+      <p class="card-text news-description">{{article.description}}</p>
+      <p class="card-text news-published">
+        <small class="text-muted">Published on {{article.publishedAt | date: 'dd/MM/yyyy'}}</small>
+      </p>
+    </div>
+  </div>
+</div>
+
+<nav aria-label="Page navigation example">
+  <ul class="pagination justify-content-end">
+    <li class="page-item" [ngClass]="{'disabled': pageNo <= 1}">
+      <a class="page-link" [ngClass]="{'disabled': pageNo <= 1}" (click)="pageNo=pageNo-1; showNewsByCategory(currentCategory, pageNo)"
+        tabindex="-1">Previous</a>
+    </li>
+    <li class="page-item" [ngClass]="{'disabled': totalNewsCount <= 20}">
+      <a class="page-link" [ngClass]="{'disabled': totalNewsCount <= 20}" (click)="pageNo=pageNo+1; showNewsByCategory(currentCategory, pageNo)">Next</a>
+    </li>
+  </ul>
+</nav>
